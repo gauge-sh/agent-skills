@@ -18,7 +18,7 @@ The typical content flow is eligible run → boundaries → create or resume dra
 
 ## Diagnose before retrying
 
-- **Command or flag rejected:** inspect `gauge --version` and nested help. If the server reports a moved path or minimum version, upgrade through the user's approved installation path.
+- **Command or flag rejected:** inspect `gauge --version` and nested help. If the server reports a moved path or minimum version, upgrade through the user's approved installation path. During the 0.8 → 0.9 vocabulary transition, `presets` are the older CLI name for `scenarios` and `cycles` are the older name for `schedules`; follow the installed CLI's help rather than probing unrelated packages or APIs.
 - **Not authenticated:** use `gauge auth status` and `gauge whoami`. Never print or reconstruct the token. Browser/device authorization may require the user.
 - **Wrong organization:** inspect `gauge orgs list` and local config; retry with an explicit `--org` only after resolving the target.
 - **Invalid asset ref:** list/get the asset and use its exact immutable `name@label`.

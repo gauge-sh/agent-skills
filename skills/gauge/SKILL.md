@@ -10,7 +10,7 @@ Use the `gauge` CLI as the programmatic interface to Gauge. Help output and JSON
 ## Begin safely
 
 1. Run `gauge --version`, then `gauge auth status` and `gauge whoami` when authentication or organization context is uncertain.
-2. If `gauge` is missing, tell the user. Install `@withgauge/cli` only when installation is within the request's scope.
+2. If `gauge` is missing and the task only needs help or read-only discovery, prefer a temporary `npx --yes @withgauge/cli@latest ...` invocation when package execution is allowed. Do not globally install it or change project dependencies without authorization. If temporary execution is unavailable, tell the user instead of searching unrelated `gauge` packages or the whole filesystem.
 3. Resolve the intended organization before an org-scoped write. Prefer an explicit global `--org <slug-or-id>` for automation; otherwise inspect `gauge orgs list` and the configured default.
 4. Use `gauge <group> --help` and `gauge <group> <command> --help` before unfamiliar or consequential operations.
 5. Prefer `-o json` for reads that inform another command. Parse identifiers from JSON; never scrape the human table.
