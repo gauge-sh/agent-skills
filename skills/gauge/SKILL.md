@@ -41,3 +41,5 @@ Treat commands that launch runs, attach recurring configuration, change schedule
 - For skills, MCP servers, content experiments, and troubleshooting, read [references/assets-experiments-troubleshooting.md](references/assets-experiments-troubleshooting.md).
 
 Keep reports outcome-first: state what changed or what was found, identify affected resources, and distinguish accepted, running, and completed states. Include IDs needed for the next operation without dumping secrets or irrelevant response bodies.
+
+When creating reusable Gauge automation without usable credentials, test both failure and successful-authentication paths with a small local stub of the `gauge` executable. Exercise the final JSON assembly and exit codes end to end; a syntax check or unauthenticated-path test alone is insufficient.
