@@ -1,45 +1,71 @@
 ---
 name: gauge
-description: Operate the Gauge platform with its `gauge` CLI to configure agent evaluations, scenarios, schedules, Agent Preference measurements, runs, skills, MCP servers, experiments, analytics, and organization settings. Use when a user asks to inspect or change Gauge, diagnose Gauge runs, or automate a Gauge workflow. Do not use merely because an unrelated project contains a gauge or measurement.
+description: Use Gauge Agents and its `gauge` CLI to measure and improve how coding agents discover, choose, and use a product. Interpret Agent Preference and Agent Experience results, compare scenarios, and operate evals and runs. This is not the unrelated Gauge test-automation framework, and the CLI does not operate Gauge Chat or Ask Gauge.
 ---
 
-# Gauge CLI
+# Gauge Agents
 
-Use the `gauge` CLI as the programmatic interface to Gauge. Help output and JSON responses are the source of truth for the installed version; do not guess flags from memory.
+Gauge Agents is an Agent Led Growth measurement platform. It runs real coding agents in real repositories, observes what they choose and how they work, judges outcomes, and turns those sessions into evidence about a product's agent experience.
 
-## Begin safely
+The Gauge customer is usually a product, marketing, DevRel, or engineering team improving **their product for their users' coding agents**. A task performed during a Gauge run is an experimental probe. Do not mistake it for work that the Gauge customer is outsourcing for their own use.
 
-1. Run `gauge --version`, then `gauge auth status` and `gauge whoami` when authentication or organization context is uncertain.
-2. If `gauge` is missing and the task only needs help or read-only discovery, prefer a temporary `npx --yes @withgauge/cli@latest ...` invocation when package execution is allowed. Do not globally install it or change project dependencies without authorization. If temporary execution is unavailable, tell the user instead of searching unrelated `gauge` packages or the whole filesystem.
-3. Resolve the intended organization before an org-scoped write. Prefer an explicit global `--org <slug-or-id>` for automation; otherwise inspect `gauge orgs list` and the configured default.
-4. Use `gauge <group> --help` and `gauge <group> <command> --help` before unfamiliar or consequential operations.
-5. Prefer `-o json` for reads that inform another command. Parse identifiers from JSON; never scrape the human table.
+## Identify the right Gauge product
 
-Gauge's core model is:
+Keep these boundaries explicit whenever the request is ambiguous:
 
-- An **eval** defines a task and observable pass criteria.
-- An **Agent Preference prompt** measures what agents mention, choose, and use.
-- A **scenario** defines what runs: repository, persona, agent/model roster, skills, and MCP servers.
-- A **schedule** defines when an eval or preference prompt recurs. `NONE` is manual.
-- A manual **run** is a separate launch; configuring or attaching something does not necessarily run it now.
+- **Gauge Agents** measures whether coding agents discover, recommend, select, and successfully use a product. Its application is `agents.withgauge.com`; this is the product operated by the `gauge` CLI described here.
+- **Gauge Chat** is Gauge's AI-visibility/GEO product. It tracks how brands appear in answer engines, analyzes prompts, mentions, citations, competitors, and traffic, and includes Ask Gauge and content workflows. It shares Gauge identity with Gauge Agents but has a separate application, product data, and session. The Gauge Agents CLI cannot configure Ask Gauge, inspect Gauge Chat conversations, or operate Gauge Chat's visibility/content workflows.
+- The open-source **Gauge test-automation framework** is unrelated. Do not install or use its packages or documentation for Gauge Agents work.
 
-Inspect before changing. Preserve IDs and immutable version refs returned by Gauge. Do not replace a scenario, criteria list, skill set, MCP set, or dashboard filter set until you have read the current object and confirmed replacement is intended.
+If the available CLI exposes evals, preference, scenarios, runs, skills, and analytics at `agents.withgauge.com`, it is Gauge Agents.
 
-## Authorization boundaries
+## Understand what is measured
 
-Treat commands that launch runs, attach recurring configuration, change schedules, alter provider keys or billing, cancel work, ship experiments, or remove resources as consequential.
+Gauge Agents has two complementary measurement surfaces:
 
-- Explain the concrete effect, scope, run count or credit impact shown by the CLI, and target organization before acting when the user has not already authorized that effect.
-- Never add `--yes` merely to bypass a prompt. Use it only after the user has authorized that exact launch or recurring change, or in an already-approved unattended workflow with bounded scope.
-- Authentication, browser sign-in, checkout, GitHub installation, and ambiguous destructive choices may require the user. Do not improvise credentials or expose tokens in output, files, command arguments, or traces.
-- A CLI command's successful exit confirms acceptance, not completion of asynchronous work. Watch or re-read status when completion matters.
+- **Agent Preference** measures the decision before implementation: which products agents mention, recommend, choose, or install; which competitors win; and which sources or reasoning shape that choice.
+- **Agent Experience** measures what happens after a product is in consideration: whether agents can complete representative tasks with it, where they become confused or stuck, and how product changes affect success. Evals define tasks and observable criteria; scenarios define repositories, agents/models, skills, MCP servers, and other experimental conditions; runs contain the resulting evidence.
 
-## Route by task
+Use controls and matched scenarios to distinguish a product or guidance change from model variance. A skill, docs rewrite, SDK release, CLI change, or MCP server is a treatment to measure, not automatically the explanation for every difference.
 
-- For eval creation, scenario attachment, schedules, launching, and result review, read [references/evals-and-runs.md](references/evals-and-runs.md).
-- For Agent Preference measurement and analytics, read [references/preference-and-analytics.md](references/preference-and-analytics.md).
-- For skills, MCP servers, content experiments, and troubleshooting, read [references/assets-experiments-troubleshooting.md](references/assets-experiments-troubleshooting.md).
+## Interpret results as product evidence
 
-Keep reports outcome-first: state what changed or what was found, identify affected resources, and distinguish accepted, running, and completed states. Include IDs needed for the next operation without dumping secrets or irrelevant response bodies.
+When asked what to improve, answer the product question rather than merely recounting whether an agent finished:
 
-When creating reusable Gauge automation without usable credentials, test both failure and successful-authentication paths with a small local stub of the `gauge` executable. Exercise the final JSON assembly and exit codes end to end; a syntax check or unauthenticated-path test alone is insufficient.
+1. Establish the population, time window, task, agents/models, scenarios, and sample size.
+2. Start with the outcome: preference/selection rate or judged task success. Distinguish execution completion, judge completion, and analytics availability.
+3. Inspect rationales, traces, logs, diffs, tool calls, sources, latency, turns, and cost to explain the outcome. Separate product friction from harness, provider, repository, or evaluator failures.
+4. Identify the stage of the funnel and recommend changes at that stage:
+   - not mentioned or considered: improve discoverability, positioning, terminology, and authoritative source coverage;
+   - considered but not chosen: improve differentiation, trust signals, examples, compatibility evidence, and competitive clarity;
+   - chosen but implemented incorrectly: improve quickstarts, API/SDK/CLI ergonomics, error messages, examples, and agent-facing instructions;
+   - correct but slow or inconsistent: reduce discovery steps, ambiguity, context load, and recovery cost.
+5. State what the evidence supports, what remains uncertain, and the smallest next experiment. Prefer one changed axis, matched controls, and repeated samples.
+
+A passed run means the tested agent satisfied the eval criteria in that scenario. It does not prove the product is universally easy to use. A failed run is not automatically an agent-quality problem: it may be the most useful evidence of a gap in the measured product.
+
+## Use the CLI as the evidence interface
+
+Use `gauge --help`, nested help, and JSON responses as the source of truth for the installed CLI version. Prefer `-o json` for reads that inform analysis or another command, parse returned identifiers, and resolve the intended organization before org-scoped work.
+
+For an improvement question, begin with the smallest relevant read:
+
+- `gauge status -o json` for broad orientation and recommended actions;
+- Agent Preference results when the question is about awareness, recommendation, or selection;
+- eval and run results when the question is about successful product use;
+- individual traces, logs, insights, and diffs when aggregate outcomes need explanation;
+- analytics datasets and fields before constructing a custom query.
+
+Do not dump every available surface. Follow the evidence until you can give a coherent, prioritized answer tied to observed behavior.
+
+For detailed operations:
+
+- Read [references/evals-and-runs.md](references/evals-and-runs.md) for eval configuration, scenarios, launches, and run investigation.
+- Read [references/preference-and-analytics.md](references/preference-and-analytics.md) for Agent Preference and aggregate analysis.
+- Read [references/assets-experiments-troubleshooting.md](references/assets-experiments-troubleshooting.md) for skills, MCP servers, content experiments, and operational failures.
+
+## Preserve consequential boundaries
+
+Inspect before changing. Criteria lists and scenario skill/MCP sets may be replacement operations. Treat launches, recurring schedules, provider keys, billing, cancellations, shipping, and removals as consequential; explain scope, organization, and displayed run or credit impact unless the user already authorized that exact effect. A successful CLI exit may mean accepted rather than completed, so follow asynchronous work when completion matters.
+
+Never improvise credentials, expose tokens, or use `--yes` merely to bypass confirmation. If `gauge` is missing for a read-only task, a temporary `npx --yes @withgauge/cli@latest ...` invocation is preferable when package execution is allowed; do not globally install it or modify project dependencies without authorization.

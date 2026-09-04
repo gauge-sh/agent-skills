@@ -1,5 +1,7 @@
 # Evals, scenarios, schedules, and runs
 
+Agent Experience evals measure whether representative users' coding agents can use the customer's product successfully. The task is experimental stimulus; the run's value is the evidence it produces about product usability, documentation, APIs, SDKs, CLIs, and agent-facing context.
+
 ## Build the configuration deliberately
 
 Read the available models with `gauge models list -o json` before pinning a model. Capability flags determine whether a harness supports skills, MCP servers, connections, or agent context.
@@ -37,5 +39,7 @@ Do not call a run failed merely because judging or warehouse ingestion is still 
 ## Compare candidates
 
 Use repeated samples when agent behavior is stochastic. Compare pass rate first, then failure modes, turns, duration, tokens, cost, tool choices, recovery behavior, and unnecessary user handoffs. Inspect traces for causal evidence rather than attributing every outcome difference to the skill.
+
+Translate observed failures into the product surface that can plausibly change. For example, distinguish failure to find the right package, failure to choose the product, failure to understand setup, incorrect implementation after reading the docs, and infrastructure failure. Report the evidence for that diagnosis and propose a controlled product or guidance change rather than treating completion of the run's coding task as the customer's end goal.
 
 Change one meaningful instruction at a time. Register each candidate as an immutable skill version and rerun the same held-constant scenarios. Keep a no-skill control when measuring whether the skill helps at all.
