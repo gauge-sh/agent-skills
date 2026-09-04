@@ -5,10 +5,12 @@ Agent Preference asks what an agent mentions, chooses, or installs. It is distin
 Interpret preference as a decision funnel, not a generic popularity score:
 
 - **Not mentioned or considered:** investigate discoverability, category language, authoritative sources, and whether agents recognize the product as relevant.
-- **Considered but not chosen:** inspect per-run rationale, competitors, trust signals, compatibility, differentiation, and source evidence.
+- **Researched or considered but not chosen:** inspect per-run rationale, competitors, trust signals, compatibility, differentiation, and source evidence. If agents frequently visit the product's docs but do not choose it, diagnose a persuasion or conversion problem rather than lack of discovery.
 - **Chosen or installed:** inspect what caused the choice, then use Agent Experience to measure whether implementation succeeds.
 
 The objective is to improve the customer's product and its representation to coding agents. Do not frame a preference run as Gauge doing the underlying coding task for the customer.
+
+Check construct validity before optimizing the result. A prompt framed around a neighboring job can cause agents to compare the wrong category of products. Unbranded recommendation or selection tasks generally measure Preference; branded implementation tasks generally measure Experience.
 
 Use `gauge preference --help` to discover the current create, edit, scenario, schedule, run, and synthesis operations. Read a prompt before editing it, preserve its immutable kind, and verify its scenarios and schedule separately.
 

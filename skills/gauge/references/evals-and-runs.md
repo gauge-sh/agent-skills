@@ -10,6 +10,8 @@ Create or select a scenario for each configuration to compare. A scenario is the
 
 An eval prompt describes the developer's goal and starting state, not the command sequence the agent should discover. Each criterion should test one precise observable outcome. Avoid criteria based only on style or confidence when a file, command result, trace event, or external state can be checked.
 
+Do not bake the expected implementation into the task. Exact APIs, providers, files, and architecture belong in criteria only when the user outcome truly requires them; otherwise they hide whether the product is discoverable and constrain the agent away from realistic behavior.
+
 Before an edit, run the corresponding `get` command. In particular, providing criteria during `gauge evals edit` replaces the complete criteria list, and `--skill` or `--mcp` during a scenario edit replaces that complete asset set.
 
 Use the subcommand help for current syntax:
